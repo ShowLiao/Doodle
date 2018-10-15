@@ -6,8 +6,17 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class DrawPath {
+	Paint paint;
+	Path path;
+}
 
 public class GraffitiView extends View {
 
@@ -16,37 +25,43 @@ public class GraffitiView extends View {
 	private float downX, downY;
 	private float tmpX, tmpY;
 
+	private List<DrawPath> drawPathList;
+
 	public GraffitiView(Context context) {
 		super(context, null);
-		init();
+		drawPathList = new ArrayList<>();
+		initPaint();
 	}
 
-	public GraffitiView(Context context, @Nullable AttributeSet attrs) {
-		super(context, attrs, 0);
-		init();
-	}
+//	public GraffitiView(Context context, @Nullable AttributeSet attrs) {
+//		super(context, attrs, 0);
+//		initPaint();
+//	}
 
-	public GraffitiView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-		super(context, attrs, defStyleAttr);
-		init();
-	}
+//	public GraffitiView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+//		super(context, attrs, defStyleAttr);
+//		initPaint();
+//	}
 
-	private void init() {
+	private void initPaint() {
 		paint = new Paint();
 		paint.setAntiAlias(true);  //鋸齒
 		paint.setStrokeWidth(10);
 		paint.setStyle(Paint.Style.STROKE);
-//		paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		path = new Path();
 	}
 
 
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		if (path != null) {
-			canvas.drawPath(path, paint);
+
+		if (drawPathList != null && !drawPathList.isEmpty()) {
+			for (DrawPath draw : drawPathList) {
+				canvas.drawPath(draw.path, draw.paint);
+			}
 		}
+
+		Log.e("onDraw", "lllll");
 	}
 
 	@Override
@@ -55,8 +70,14 @@ public class GraffitiView extends View {
 			case MotionEvent.ACTION_DOWN:
 				downX = event.getX();
 				downY = event.getY();
+				path = new Path();
 				path.moveTo(downX, downY);
 
+				DrawPath drawPath = new DrawPath();
+				drawPath.path = path;
+				drawPath.paint = paint;
+
+				drawPathList.add(drawPath);
 				invalidate();
 
 				tmpX = downX;
@@ -73,7 +94,20 @@ public class GraffitiView extends View {
 				tmpX = mvX;
 				tmpY = mvY;
 				break;
+
+			case MotionEvent.ACTION_UP:
+				invalidate();
+				break;
 		}
 		return true;
+	}
+
+	public void undo() {
+
+		if (drawPathList != null && drawPathList.size() > 0) {
+			drawPathList.remove(drawPathList.size() - 1);
+			invalidate();
+		}
+
 	}
 }
