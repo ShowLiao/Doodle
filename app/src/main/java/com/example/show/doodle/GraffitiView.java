@@ -4,14 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.support.annotation.Nullable;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 class DrawPath {
 	Paint paint;
@@ -25,11 +22,15 @@ public class GraffitiView extends View {
 	private float downX, downY;
 	private float tmpX, tmpY;
 
-	private List<DrawPath> drawPathList;
+	private Stack<DrawPath> drawPathStack;
+	private Stack<DrawPath> redoDrawPathStack;
+
+
 
 	public GraffitiView(Context context) {
 		super(context, null);
-		drawPathList = new ArrayList<>();
+		drawPathStack = new Stack<>();
+		redoDrawPathStack = new Stack<>();
 		initPaint();
 	}
 
@@ -55,13 +56,11 @@ public class GraffitiView extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		if (drawPathList != null && !drawPathList.isEmpty()) {
-			for (DrawPath draw : drawPathList) {
+		if (drawPathStack != null && !drawPathStack.isEmpty()) {
+			for (DrawPath draw : drawPathStack) {
 				canvas.drawPath(draw.path, draw.paint);
 			}
 		}
-
-		Log.e("onDraw", "lllll");
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public class GraffitiView extends View {
 				drawPath.path = path;
 				drawPath.paint = paint;
 
-				drawPathList.add(drawPath);
+				drawPathStack.push(drawPath);
 				invalidate();
 
 				tmpX = downX;
@@ -104,10 +103,17 @@ public class GraffitiView extends View {
 
 	public void undo() {
 
-		if (drawPathList != null && drawPathList.size() > 0) {
-			drawPathList.remove(drawPathList.size() - 1);
+		if (drawPathStack != null && drawPathStack.size() > 0) {
+			redoDrawPathStack.push(drawPathStack.pop());
 			invalidate();
 		}
 
+	}
+
+	public void redo() {
+		if (redoDrawPathStack != null && !redoDrawPathStack.isEmpty()) {
+			drawPathStack.push(redoDrawPathStack.pop());
+			invalidate();
+		}
 	}
 }

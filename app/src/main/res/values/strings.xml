@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Doodle</string>
+    <string name="undo">undo</string>
+    <string name="redo">redo</string>
 </resources>
