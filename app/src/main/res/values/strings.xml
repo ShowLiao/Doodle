@@ -2,4 +2,7 @@
     <string name="app_name">Doodle</string>
     <string name="undo">undo</string>
     <string name="redo">redo</string>
+    <string name="blue">Blue</string>
+    <string name="black">Black</string>
+    <string name="red">Red</string>
 </resources>

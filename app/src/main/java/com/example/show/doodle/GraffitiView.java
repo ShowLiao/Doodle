@@ -2,6 +2,7 @@ package com.example.show.doodle;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.Log;
@@ -25,7 +26,7 @@ public class GraffitiView extends View {
 	private Stack<DrawPath> drawPathStack;
 	private Stack<DrawPath> redoDrawPathStack;
 
-
+	private int mColor = Color.BLACK;
 
 	public GraffitiView(Context context) {
 		super(context, null);
@@ -49,6 +50,7 @@ public class GraffitiView extends View {
 		paint.setAntiAlias(true);  //鋸齒
 		paint.setStrokeWidth(10);
 		paint.setStyle(Paint.Style.STROKE);
+		paint.setColor(mColor);
 	}
 
 
@@ -95,7 +97,7 @@ public class GraffitiView extends View {
 				break;
 
 			case MotionEvent.ACTION_UP:
-				invalidate();
+				initPaint();
 				break;
 		}
 		return true;
@@ -115,5 +117,10 @@ public class GraffitiView extends View {
 			drawPathStack.push(redoDrawPathStack.pop());
 			invalidate();
 		}
+	}
+
+	public void resetPaintColor(int color) {
+		mColor = color;
+		paint.setColor(color);
 	}
 }

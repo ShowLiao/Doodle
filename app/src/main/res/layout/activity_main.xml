@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/btnUndo"
-        android:layout_width="74dp"
+        android:layout_width="65dp"
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -18,14 +18,48 @@
 
     <Button
         android:id="@+id/btnRedo"
-        android:layout_width="67dp"
+        android:layout_width="65dp"
         android:layout_height="45dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="8dp"
         android:text="@string/redo"
-        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.075"
         app:layout_constraintStart_toEndOf="@+id/btnUndo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnBlack"
+        android:layout_width="70dp"
+        android:layout_height="45dp"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="20dp"
+        android:text="@string/black"
+        app:layout_constraintStart_toEndOf="@+id/btnRedo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnBlue"
+        android:layout_width="70dp"
+        android:layout_height="45dp"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="20dp"
+        android:text="@string/blue"
+        app:layout_constraintStart_toEndOf="@+id/btnBlack"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnRed"
+        android:layout_width="70dp"
+        android:layout_height="45dp"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="20dp"
+        android:text="@string/red"
+        app:layout_constraintStart_toEndOf="@+id/btnBlue"
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
@@ -36,7 +70,10 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.756"
-        tools:layout_editor_absoluteX="0dp" />
+
+        tools:layout_editor_absoluteX="0dp" >
+
+
+    </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>

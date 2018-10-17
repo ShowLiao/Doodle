@@ -3,6 +3,7 @@ package com.example.show.doodle;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -38,6 +39,30 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 				graffitView.redo();
+			}
+		});
+
+		Button btnBlack = findViewById(R.id.btnBlack);
+		btnBlack.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				graffitView.resetPaintColor(Color.BLACK);
+			}
+		});
+
+		Button btnBlue = findViewById(R.id.btnBlue);
+		btnBlue.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				graffitView.resetPaintColor(Color.BLUE);
+			}
+		});
+
+		Button btnRed = findViewById(R.id.btnRed);
+		btnRed.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				graffitView.resetPaintColor(Color.RED);
 			}
 		});
 	}
