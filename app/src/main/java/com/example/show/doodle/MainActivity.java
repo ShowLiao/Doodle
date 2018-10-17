@@ -65,6 +65,14 @@ public class MainActivity extends AppCompatActivity {
 				graffitView.resetPaintColor(Color.RED);
 			}
 		});
+
+		Button btnEraser = findViewById(R.id.btnEraser);
+		btnEraser.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				graffitView.eraser();
+			}
+		});
 	}
 
 }

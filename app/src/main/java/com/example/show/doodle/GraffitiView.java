@@ -22,6 +22,7 @@ public class GraffitiView extends View {
 	private Path path;
 	private float downX, downY;
 	private float tmpX, tmpY;
+	private int mPaintWidth = 10;
 
 	private Stack<DrawPath> drawPathStack;
 	private Stack<DrawPath> redoDrawPathStack;
@@ -48,7 +49,7 @@ public class GraffitiView extends View {
 	private void initPaint() {
 		paint = new Paint();
 		paint.setAntiAlias(true);  //鋸齒
-		paint.setStrokeWidth(10);
+		paint.setStrokeWidth(mPaintWidth);
 		paint.setStyle(Paint.Style.STROKE);
 		paint.setColor(mColor);
 	}
@@ -97,6 +98,7 @@ public class GraffitiView extends View {
 				break;
 
 			case MotionEvent.ACTION_UP:
+				mPaintWidth = 10;
 				initPaint();
 				break;
 		}
@@ -122,5 +124,10 @@ public class GraffitiView extends View {
 	public void resetPaintColor(int color) {
 		mColor = color;
 		paint.setColor(color);
+	}
+
+	public void eraser() {
+		paint.setColor(Color.WHITE);
+		paint.setStrokeWidth(mPaintWidth + 6);
 	}
 }
