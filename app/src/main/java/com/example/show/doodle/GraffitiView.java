@@ -9,7 +9,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 
 class DrawPath {
 	Paint paint;
@@ -24,15 +25,15 @@ public class GraffitiView extends View {
 	private float tmpX, tmpY;
 	private int mPaintWidth = 10;
 
-	private Stack<DrawPath> drawPathStack;
-	private Stack<DrawPath> redoDrawPathStack;
+	private List<DrawPath> drawPathList;
+	private List<DrawPath> redoDrawPathList;
 
 	private int mColor = Color.BLACK;
 
 	public GraffitiView(Context context) {
 		super(context, null);
-		drawPathStack = new Stack<>();
-		redoDrawPathStack = new Stack<>();
+		drawPathList = new ArrayList<>();
+		redoDrawPathList = new ArrayList<>();
 		initPaint();
 	}
 
@@ -59,8 +60,8 @@ public class GraffitiView extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		if (drawPathStack != null && !drawPathStack.isEmpty()) {
-			for (DrawPath draw : drawPathStack) {
+		if (drawPathList != null && !drawPathList.isEmpty()) {
+			for (DrawPath draw : drawPathList) {
 				canvas.drawPath(draw.path, draw.paint);
 			}
 		}
@@ -79,7 +80,7 @@ public class GraffitiView extends View {
 				drawPath.path = path;
 				drawPath.paint = paint;
 
-				drawPathStack.push(drawPath);
+				drawPathList.add(drawPath);
 				invalidate();
 
 				tmpX = downX;
@@ -107,16 +108,16 @@ public class GraffitiView extends View {
 
 	public void undo() {
 
-		if (drawPathStack != null && drawPathStack.size() > 0) {
-			redoDrawPathStack.push(drawPathStack.pop());
+		if (drawPathList != null && drawPathList.size() > 0) {
+			redoDrawPathList.add(drawPathList.remove(drawPathList.size() - 1));
 			invalidate();
 		}
 
 	}
 
 	public void redo() {
-		if (redoDrawPathStack != null && !redoDrawPathStack.isEmpty()) {
-			drawPathStack.push(redoDrawPathStack.pop());
+		if (redoDrawPathList != null && redoDrawPathList.size() > 0) {
+			drawPathList.add(redoDrawPathList.remove(redoDrawPathList.size() - 1));
 			invalidate();
 		}
 	}
