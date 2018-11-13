@@ -23,12 +23,16 @@ public class GraffitiView extends View {
 	private Path path;
 	private float downX, downY;
 	private float tmpX, tmpY;
-	private int mPaintWidth = 10;
+	private static final int iPaintWidth = 20;
+
+	private int mPaintWidth = iPaintWidth;
 
 	private List<DrawPath> drawPathList;
 	private List<DrawPath> redoDrawPathList;
 
 	private int mColor = Color.BLACK;
+
+	private float mPressure = 0;
 
 	public GraffitiView(Context context) {
 		super(context, null);
@@ -70,7 +74,7 @@ public class GraffitiView extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_DOWN: {
 				downX = event.getX();
 				downY = event.getY();
 				path = new Path();
@@ -82,26 +86,44 @@ public class GraffitiView extends View {
 
 				drawPathList.add(drawPath);
 				invalidate();
-
+				initPaint();
 				tmpX = downX;
 				tmpY = downY;
-				break;
-
-			case MotionEvent.ACTION_MOVE:
+			}
+			case MotionEvent.ACTION_MOVE: {
 				float mvX = event.getX();
 				float mvY = event.getY();
+
+				path = new Path();
+				path.moveTo(mvX, mvY);
+
 				path.quadTo(tmpX, tmpY, mvX, mvY);
 
-				invalidate();
+				DrawPath drawPath = new DrawPath();
+				drawPath.path = path;
+				drawPath.paint = paint;
 
+				if (event.getPressure() > mPressure) {
+					mPaintWidth+=2;
+					paint.setStrokeWidth(mPaintWidth);
+				} else if (event.getPressure() < mPressure) {
+					mPaintWidth-=2;
+					paint.setStrokeWidth(mPaintWidth);
+				}
+
+				drawPathList.add(drawPath);
+
+				invalidate();
+				initPaint();
 				tmpX = mvX;
 				tmpY = mvY;
 				break;
-
-			case MotionEvent.ACTION_UP:
-				mPaintWidth = 10;
+			}
+			case MotionEvent.ACTION_UP: {
+				mPaintWidth = iPaintWidth;
 				initPaint();
 				break;
+			}
 		}
 		return true;
 	}
